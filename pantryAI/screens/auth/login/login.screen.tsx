@@ -141,7 +141,7 @@ export default function LoginScreen() {
                         />
                     </View>
                     {error.password &&(
-                        <View style={[commonStyles.errorContainer, {top:145}]}>
+                        <View style={[commonStyles.errorContainer, {top:155}]}>
                             <Entypo name="cross" size={18} color={"red"} />
                             <Text style={styles.errorText}>{error.password}</Text>
                         </View>

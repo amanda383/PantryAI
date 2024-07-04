@@ -1,6 +1,6 @@
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import { Entypo, FontAwesome, Fontisto,Ionicons,SimpleLineIcons } from '@expo/vector-icons'
+import { AntDesign, Entypo, FontAwesome, Fontisto,Ionicons,SimpleLineIcons } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useFonts, Raleway_700Bold, Raleway_600SemiBold } from '@expo-google-fonts/raleway'
 import { Nunito_400Regular, Nunito_700Bold, Nunito_500Medium, Nunito_600SemiBold } from '@expo-google-fonts/nunito'
@@ -14,6 +14,7 @@ export default function SignUpScreen() {
     const [isPasswordVisible, setPasswordVisible] =useState(false);
     const [buttonSpinner, setButtonSpinner] =useState(false)
     const [userInfo, setUserInfo] = useState({
+        name: "",
         email: "",
         password: "",
     })
@@ -68,7 +69,7 @@ export default function SignUpScreen() {
     }
 
     const handleSignIn =() => {
-        
+        router.push("/(routes)/verifyAccount")
     }
 
   return (
@@ -79,18 +80,35 @@ export default function SignUpScreen() {
         <ScrollView>
             <Image
             style={styles.signInImage}
-            source={require("@/assets/sign-in/signin.png")}
+            source={require("@/assets/sign-in/signup.png")}
             />
             <Text style={[styles.welcomeText,{fontFamily:"Raleway_700Bold"}]}>
-            Welcome Back!
+           Let's get started!
             </Text>
             <Text style={styles.subtext}>
-            Login to your existing account
+            Create an account to PantryAI to become a chef
             </Text>
             <View style={styles.inputContainer}>
                 <View>
+                    <View>
                     <TextInput 
                         style={[commonStyles.input, {paddingLeft:40}]}
+                        keyboardType='default'
+                        value={userInfo.name}
+                        placeholder='John Doe'
+                        onChangeText={(value)=> 
+                            setUserInfo({...userInfo,name:value})}
+
+                    />
+                    <AntDesign 
+                        style={{position:"absolute", left: 26, top: 17.8}}
+                        name='user'
+                        size={20}
+                        color={"#99ABC1"}
+                    />
+                    </View>
+                    <TextInput 
+                        style={[commonStyles.input, {paddingLeft:40, marginTop:15}]}
                         keyboardType='email-address'
                         value={userInfo.email}
                         placeholder='support@PantryAI.com'
@@ -99,7 +117,7 @@ export default function SignUpScreen() {
 
                     />
                     <Fontisto 
-                        style={{position:"absolute", left: 26, top: 17.8}}
+                        style={{position:"absolute", left: 26, top: 88.9}}
                         name='email'
                         size={20}
                         color={"#99ABC1"}
@@ -141,23 +159,20 @@ export default function SignUpScreen() {
                         />
                     </View>
                     {error.password &&(
-                        <View style={[commonStyles.errorContainer, {top:145}]}>
+                        <View style={[commonStyles.errorContainer, {top:200}]}>
                             <Entypo name="cross" size={18} color={"red"} />
                             <Text style={styles.errorText}>{error.password}</Text>
                         </View>
                     )}
                    
                 </View>
-                <TouchableOpacity onPress={()=>router.push("/(routes)/forgot-password")}>
-                    <Text style={[styles.forgotSection, {fontFamily:"Nunito_600SemiBold"}]}>Forgot Password?</Text>
-                </TouchableOpacity>
-
+                
                 <TouchableOpacity style={{padding: 16, borderRadius:8,marginHorizontal: 16, backgroundColor: "#14293A"}} onPress={handleSignIn}>
                     {
                         buttonSpinner ? (
                             <ActivityIndicator size="small" color={"white"} />
                         ) : (
-                            <Text style={{color: "white", textAlign: "center", fontSize: 16, fontFamily:"Raleway_700Bold"}}>Sign In</Text>
+                            <Text style={{color: "white", textAlign: "center", fontSize: 16, fontFamily:"Raleway_700Bold"}}>Sign Up</Text>
                         )
                     }
 
@@ -171,11 +186,11 @@ export default function SignUpScreen() {
                 
 
                 <View style={styles.signupRedirect}>
-                    <Text style={{fontSize: 18, fontFamily: "Raleway_600SemiBold"}}> Don't have an account?</Text>
+                    <Text style={{fontSize: 18, fontFamily: "Raleway_600SemiBold"}}> Have an account?</Text>
                     <TouchableOpacity
-                    onPress={()=>router.push("/(routes)/sign-up")}
+                    onPress={()=>router.push("/(routes)/login")}
                     >
-                        <Text style={{fontSize:18, fontFamily:"Raleway_600SemiBold", color:"#14293A", marginLeft:5}}>Sign Up</Text>
+                        <Text style={{fontSize:18, fontFamily:"Raleway_600SemiBold", color:"#14293A", marginLeft:5}}>Sign In</Text>
                     </TouchableOpacity>
                 </View>
             </View>
