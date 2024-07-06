@@ -55,9 +55,16 @@ export default function VerifyAccountScreen() {
         title="submit"
         onPress={handleSubmit}/>
      </View>
-     <TouchableOpacity onPress={()=> router.back()}>
-        <Text style={{fontSize:15, paddingTop:20, fontWeight:"500"}}>Go back to Sign In</Text>
-     </TouchableOpacity>
+     <View style={styles.loginLink}>
+        <Text style={[styles.backText, { fontFamily: "Nunito_700Bold" }]}>
+          Back To?
+        </Text>
+        <TouchableOpacity onPress={() => router.back()}>
+          <Text style={[styles.loginText, { fontFamily: "Nunito_700Bold" }]}>
+            Sign In
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   )
 }
@@ -95,5 +102,16 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         fontSize: 20,
 
-    }
+    },
+    loginLink: {
+        flexDirection: "row",
+        marginTop: 30,
+      },
+      loginText: {
+        color: "#14293A",
+        marginLeft: 5,
+        fontSize: 16,
+      },
+    
+      backText: { fontSize: 16 },
 })
