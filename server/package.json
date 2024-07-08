@@ -4,7 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "ts-node-dev --respawn --transpile-only server.ts"
   },
   "author": "amanda li",
   "license": "ISC",
@@ -24,5 +25,8 @@
     "mongoose": "^8.4.5",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.5.3"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17"
   }
 }
