@@ -68,7 +68,8 @@ export default function LoginScreen() {
     }
 
     const handleSignIn =() => {
-        
+        router.push("/(tabs)")
+
     }
 
   return (

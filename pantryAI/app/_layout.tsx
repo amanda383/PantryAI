@@ -8,6 +8,8 @@ import { View } from 'react-native';
 import { useState } from 'react';
 import Onboarding from './(routes)/onboarding';
 import { Stack } from 'expo-router';
+import { ToastProvider } from 'react-native-toast-notifications';
+import TabsLayout from './(tabs)/_layout';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -44,10 +46,9 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const [isLoggin, setisLoggin] = useState(false);
   return (
-    <>
+    <ToastProvider>
           {isLoggin ? (
-            <View>
-              </View>
+           <TabsLayout />
 
           ) : (
             <Stack screenOptions={{headerShown:false}}>
@@ -62,6 +63,6 @@ function RootLayoutNav() {
             </Stack>
           )}
     
-      </>
+      </ToastProvider>
   );
 }

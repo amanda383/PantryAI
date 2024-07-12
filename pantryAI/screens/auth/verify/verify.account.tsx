@@ -25,6 +25,7 @@ export default function VerifyAccountScreen() {
     }
 
     const handleSubmit = ()=> {
+      router.push("/(routes)/home");
 
     }
 
