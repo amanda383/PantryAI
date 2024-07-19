@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import GenerateScreen from '@/screens/generate/generate.screen'
+import GenerateListScreen from '@/screens/generate/generate.list.screen'
 
 export default function Generate() {
   return (
-    <GenerateScreen />
+    <GenerateListScreen />
   )
 }
 
