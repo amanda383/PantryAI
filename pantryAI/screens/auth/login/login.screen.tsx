@@ -9,6 +9,8 @@ import { commonStyles } from '@/styles/common/common.styles'
 import { ScrollView, Image } from 'react-native'
 import { TextInput } from 'react-native'
 import { router } from 'expo-router'
+import axios from 'axios'
+import { SERVER_URI } from '@/utils/uri'
 
 export default function LoginScreen() {
     const [isPasswordVisible, setPasswordVisible] =useState(false);
@@ -67,9 +69,14 @@ export default function LoginScreen() {
         }
     }
 
-    const handleSignIn =() => {
-        router.push("/(tabs)")
-
+    const handleSignIn = async () => {
+         try {
+           const response = await axios.post(`${SERVER_URI}/api/auth/signin`, userInfo);
+           console.log("User registered successfully:", response.data);
+           router.push("/(tabs)");
+         } catch (error) {
+           console.error("Error during sign Ip:");
+         }
     }
 
   return (

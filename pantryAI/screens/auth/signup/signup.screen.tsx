@@ -9,6 +9,8 @@ import { commonStyles } from '@/styles/common/common.styles'
 import { ScrollView, Image } from 'react-native'
 import { TextInput } from 'react-native'
 import { router } from 'expo-router'
+import axios from 'axios'
+import { SERVER_URI } from '@/utils/uri'
 
 export default function SignUpScreen() {
     const [isPasswordVisible, setPasswordVisible] =useState(false);
@@ -68,9 +70,21 @@ export default function SignUpScreen() {
         }
     }
 
-    const handleSignIn =() => {
-        router.push("/(routes)/verifyAccount")
-    }
+       const handleSignUp = async () => {
+         setButtonSpinner(true);
+         try {
+           const response = await axios.post(`${SERVER_URI}/api/auth/signup`, userInfo);
+           console.log("User registered successfully:", response.data);
+           router.push("/(tabs)");
+         } catch (error) {
+           console.error(
+             "Error during sign up:",
+           );
+         } finally {
+           setButtonSpinner(false);
+         }
+       };
+
 
   return (
     //background gradient
@@ -167,7 +181,7 @@ export default function SignUpScreen() {
                    
                 </View>
                 
-                <TouchableOpacity style={{padding: 16, borderRadius:8,marginHorizontal: 16, backgroundColor: "#14293A"}} onPress={handleSignIn}>
+                <TouchableOpacity style={{padding: 16, borderRadius:8,marginHorizontal: 16, backgroundColor: "#14293A"}} onPress={handleSignUp}>
                     {
                         buttonSpinner ? (
                             <ActivityIndicator size="small" color={"white"} />

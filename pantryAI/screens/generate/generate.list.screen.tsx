@@ -5,6 +5,10 @@ import {
   View,
   TouchableOpacity,
   FlatList,
+  ActivityIndicator,
+  Alert,
+  Modal,
+  TextInput,
 } from "react-native";
 import { useFonts } from "expo-font";
 import {
@@ -20,7 +24,7 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import RNPickerSelect from "react-native-picker-select";
 import axios from "axios";
-// import { SPOONACULAR_API_KEY } from "@";
+import { router } from "expo-router";
 
 interface Item {
   id: string;
@@ -62,36 +66,76 @@ export default function GeneratedlistScreen() {
     Raleway_600SemiBold,
   });
   const [selectedDietary, setSelectedDietary] = useState<string | null>(null);
+  const [items, setItems] = useState(initialItems);
+  const [loading, setLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [newItem, setNewItem] = useState("");
 
-  if (!fontsLoaded && !fontError) {
-    return null;
+  if (!fontsLoaded) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
+
+  if (fontError) {
+    console.error("Error loading fonts", fontError);
+    return <Text>Error loading fonts</Text>;
   }
 
   const handleDietaryPress = () => {
     console.log("Dietary button pressed", selectedDietary);
   };
 
-  const handleGeneratePress = async () => {
-    if (!selectedDietary) {
-      console.log("No dietary option selected");
+  const handleGeneratePress = () => {
+  router.push({
+    pathname: "/(routes)/generatefood",
+    params: {
+      dietary: selectedDietary,
+      items: items.map(item => item.name),
+    },
+  });
+};
+
+    // if (!selectedDietary) {
+    //   Alert.alert("Error", "No dietary option selected");
+    //   return;
+    // }
+
+    // setLoading(true);
+
+    // try {
+    //   const response = await axios.get(
+    //     `https://api.spoonacular.com/recipes/complexSearch`,
+    //     {
+    //       params: {
+    //         food: items.map((item) => item.name).join(","),
+    //         diet: selectedDietary,
+    //         apiKey: process.env.EXPO_PUBLIC_SPOONACULAR_API_KEY,
+    //       },
+    //     }
+    //   );
+    //   console.log("Data fetched:", response.data);
+    //   // Process response data here
+    // } catch (error) {
+    //   console.error("Error fetching data:", error);
+    //   Alert.alert(
+    //     "Error",
+    //     "Failed to fetch data. Check your API key and try again."
+    //   );
+    // } finally {
+    //   setLoading(false);
+    // }
+
+  const handleAddItem = () => {
+    if (newItem.trim().length === 0) {
+      Alert.alert("Error", "Item name cannot be empty");
       return;
     }
 
-    try {
-      const response = await axios.get(
-        `https://api.spoonacular.com/recipes/complexSearch`,
-        {
-          params: {
-            dietaryRestrictions: selectedDietary,
-            // apiKey: SPOONACULAR_API_KEY,
-          },
-        }
-      );
-      console.log("Data fetched:", response.data);
-      // Process response data here
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
+    setItems((prevItems) => [
+      ...prevItems,
+      { id: (prevItems.length + 1).toString(), name: newItem },
+    ]);
+    setNewItem("");
+    setModalVisible(false);
   };
 
   const renderItem = ({ item }: { item: Item }) => (
@@ -109,8 +153,14 @@ export default function GeneratedlistScreen() {
         <View style={styles.headerContainer}>
           <Text style={styles.header}>Items</Text>
         </View>
+        <TouchableOpacity
+          style={styles.missingItemsButton}
+          onPress={() => setModalVisible(true)}
+        >
+          <Text style={styles.buttonText}>Add Missing Item</Text>
+        </TouchableOpacity>
         <FlatList
-          data={initialItems}
+          data={items}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
         />
@@ -126,9 +176,38 @@ export default function GeneratedlistScreen() {
         <TouchableOpacity
           style={styles.buttonWrapper}
           onPress={handleGeneratePress}
+          disabled={loading}
         >
-          <Text style={styles.buttonText}>Generate</Text>
+          <Text style={styles.buttonText}>
+            {loading ? "Generating..." : "Generate"}
+          </Text>
         </TouchableOpacity>
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}
+        >
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Add New Item</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Item name"
+              value={newItem}
+              onChangeText={setNewItem}
+            />
+            <TouchableOpacity style={styles.addButton} onPress={handleAddItem}>
+              <Text style={styles.addButtonText}>Add</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={styles.addButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
       </View>
     </LinearGradient>
   );
@@ -163,26 +242,79 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontSize: 18,
+    fontFamily: "Nunito_500Medium",
   },
   pickerContainer: {
     marginTop: 20,
-    textAlign: "center",
-    alignContent: "center",
-  },
-  buttonsContainer: {
-    flex: 1,
-    marginTop: 70,
   },
   buttonWrapper: {
     backgroundColor: "#14293A",
     paddingVertical: 18,
-    borderRadius: 4,
-    marginTop: 40,
-    marginBottom: 40,
+    borderRadius: 10,
+    marginTop: 20,
+    marginBottom: 60,
+    alignItems: "center",
   },
   buttonText: {
     color: "white",
     textAlign: "center",
+    fontFamily: "Nunito_500Medium",
+  },
+  missingItemsButton: {
+    backgroundColor: "#14293A",
+    // marginLeft: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 100,
+    marginBottom: 10,
+  },
+  modalView: {
+    margin: 40,
+    marginTop: 80,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 15,
+    textAlign: "center",
+  },
+  input: {
+    height: 40,
+    borderColor: "#ddd",
+    borderWidth: 1,
+    borderRadius: 4,
+    paddingHorizontal: 10,
+    marginBottom: 20,
+    width: "80%",
+  },
+  addButton: {
+    backgroundColor: "#14293A",
+    padding: 10,
+    borderRadius: 4,
+    marginBottom: 10,
+    alignItems: "center",
+    width: "80%",
+  },
+  addButtonText: {
+    color: "white",
+  },
+  closeButton: {
+    backgroundColor: "#D9534F",
+    padding: 10,
+    borderRadius: 4,
+    alignItems: "center",
+    width: "80%",
   },
 });
 
@@ -196,7 +328,6 @@ const pickerSelectStyles = StyleSheet.create({
     borderRadius: 4,
     color: "black",
     paddingRight: 30,
-    alignContent: "center",
   },
   inputAndroid: {
     fontSize: 16,
@@ -207,6 +338,5 @@ const pickerSelectStyles = StyleSheet.create({
     borderRadius: 8,
     color: "black",
     paddingRight: 30,
-    alignContent: "center",
   },
 });

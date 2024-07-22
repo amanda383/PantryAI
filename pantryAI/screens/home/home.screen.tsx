@@ -14,15 +14,9 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import {
-  responsiveHeight,
-  responsiveWidth,
-} from "react-native-responsive-dimensions";
-import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import LottieView from "lottie-react-native"; // Import LottieView
-import animation from "@/assets/animations/animation2.json"; // Replace with your actual path to the Lottie JSON file
 
 export default function HomeScreen() {
   let [fontsLoaded, fontError] = useFonts({
@@ -53,12 +47,9 @@ export default function HomeScreen() {
             Just scan your fridge and let our chefbots do the work
           </Text>
         </View>
-        {/* Add Lottie animation */}
-        <LottieView
-          source={animation}
-          autoPlay
-          loop
-          style={styles.lottieAnimation} // Use the correct style
+        <Image
+          source={require("@/assets/images/homerobo.png")}
+          style={styles.image}
         />
         <TouchableOpacity
           style={styles.buttonWrapper}
@@ -102,21 +93,20 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#99ABC1",
   },
+  image: {
+    width: wp("80%"),
+    height: hp("40%"),
+    alignSelf: "center",
+    marginTop: 20,
+  },
   buttonWrapper: {
     backgroundColor: "#14293A",
     paddingVertical: 18,
-    borderRadius: 4,
+    borderRadius: 10,
     marginTop: 40,
   },
   buttonText: {
     color: "white",
     textAlign: "center",
-  },
-  lottieAnimation: {
-    // Define the lottieAnimation style
-    width: wp("80%"),
-    height: hp("40%"),
-    alignSelf: "center",
-    marginTop: 20,
   },
 });
