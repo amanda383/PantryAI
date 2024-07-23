@@ -73,6 +73,8 @@ export default function SignUpScreen() {
        const handleSignUp = async () => {
          setButtonSpinner(true);
          try {
+            console.log("handleSignUp called");
+            console.log(userInfo)
            const response = await axios.post(`${SERVER_URI}/api/auth/signup`, userInfo);
            console.log("User registered successfully:", response.data);
            router.push("/(tabs)");

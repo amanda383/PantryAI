@@ -15,6 +15,8 @@ export const signUp = async (req: Request, res: Response, next: NextFunction) =>
             message: "User registered successfully",
             data: newUser
         });
+         console.log(req.body)
+
     } catch (error) {
         next(error);
     }

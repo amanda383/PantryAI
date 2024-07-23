@@ -75,7 +75,7 @@ export default function LoginScreen() {
            console.log("User registered successfully:", response.data);
            router.push("/(tabs)");
          } catch (error) {
-           console.error("Error during sign Ip:");
+           console.error("Error during sign up:");
          }
     }
 
