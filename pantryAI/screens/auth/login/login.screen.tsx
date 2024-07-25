@@ -68,6 +68,10 @@ export default function LoginScreen() {
             setUserInfo({...userInfo, password: value})
         }
     }
+//testing purpose
+    // const handleSignIn = ()=>{
+    //     router.push('/(tabs)')
+    // }
 
     const handleSignIn = async () => {
          try {
