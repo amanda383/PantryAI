@@ -5,17 +5,7 @@ Why was this created you may ask. Well as a college student that often buys food
 
 Thus I wanted to bring an awareness to this and a solution. PantryAI will help you scan through ingredients that you might have and generate recipes based on your preferences and dietery restrictions. 
 
-## Usage
 
-```Javascript
-
-```
-
-## Installation
-
-```bash
-npx expo start
-```
 
 ## Contributing
 
